@@ -76,3 +76,15 @@ func (s *Blog) Create(ctx *gofr.Context, blog *model.Blog) (*model.Blog, error) 
 
 	return &data, nil
 }
+
+func (s *Blog) Delete(ctx *gofr.Context, id int) error {
+	coll := s.connectMongoDB(ctx)
+	
+	filter := bson.M{"id": id}
+	result, err := coll.DeleteMany(context.TODO(), filter)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Number of documents deleted: %d\n", result.DeletedCount)
+	return nil
+}

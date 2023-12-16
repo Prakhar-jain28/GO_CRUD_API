@@ -63,3 +63,22 @@ func (h handler) Create(ctx *gofr.Context) (interface{}, error) {
 
 	return resp, nil
 }
+
+
+func (h handler) Delete(ctx *gofr.Context) (interface{}, error) {
+	i := ctx.PathParam("ID")
+	if i == "" {
+		return nil, errors.MissingParam{Param: []string{"id"}}
+	}
+
+	id, err := validateID(i)
+	if err != nil {
+		return nil, errors.InvalidParam{Param: []string{"id"}}
+	}
+
+	if err := h.store.Delete(ctx, id); err != nil {
+		return nil, err
+	}
+
+	return "Deleted successfully", nil
+}
