@@ -13,7 +13,8 @@ func main() {
 	s := datastore.New()
 	h := handler.New(*s)
 
-	app.POST("/students", h.Create)
+	app.GET("/blog/{ID}", h.GetByID)   
+	app.POST("/blog", h.Create)
 
 	app.Server.HTTP.Port = 9092
 	app.Start()

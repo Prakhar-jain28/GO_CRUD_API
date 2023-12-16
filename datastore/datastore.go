@@ -3,6 +3,7 @@ package datastore
 import (
 	"GO-LANG/model"
 	"os"
+	"strconv"
 
 	"context"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 
 	"gofr.dev/pkg/gofr"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -37,6 +39,27 @@ func (s *Blog) connectMongoDB(ctx *gofr.Context) *mongo.Collection {
 	fmt.Println("Connected to MongoDB")
 	return s.client.Database("sample_mflix").Collection("Blogs")
 }
+
+func (s *Blog) GetByID(ctx *gofr.Context, ID string) (*model.Blog, error) {
+	coll := s.connectMongoDB(ctx)
+	var result model.Blog
+	i, errr := strconv.Atoi(ID)
+	if errr != nil {
+		return nil, errr
+	}
+	fmt.Println("ID:", i)
+
+	err := coll.FindOne(context.Background(), bson.M{"id": i}).Decode(&result)
+	if err != nil {
+		fmt.Println("FindOne ERROR:", err)
+		return nil, err
+	}
+
+	fmt.Println(coll.FindOne(context.Background(), bson.M{"id": i}))
+	return &result, nil
+}
+
+
 
 func (s *Blog) Create(ctx *gofr.Context, blog *model.Blog) (*model.Blog, error) {
 
