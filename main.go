@@ -1,14 +1,20 @@
 package main
 
-import "gofr.dev/pkg/gofr"
+import (
+	"GO-LANG/datastore"
+	"GO-LANG/handler"
+
+	"gofr.dev/pkg/gofr"
+) 
 
 func main() {
 	app := gofr.New()
 
-	app.GET("/home", func(ctx *gofr.Context) (interface{}, error) {
-		return "Home Page", nil
-	})
+	s := datastore.New()
+	h := handler.New(*s)
 
+	app.POST("/students", h.Create)
+
+	app.Server.HTTP.Port = 9092
 	app.Start()
-	// app.Run("localhost:8080")
 }
