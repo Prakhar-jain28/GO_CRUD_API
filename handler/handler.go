@@ -6,8 +6,8 @@ import (
 	"gofr.dev/pkg/errors"
 	"gofr.dev/pkg/gofr"
 
-	"GO-LANG/datastore"
-	"GO-LANG/model"
+	"github.com/Prakhar-jain28/GO_CRUD_API/datastore"
+	"github.com/Prakhar-jain28/GO_CRUD_API/model"
 )
 
 type handler struct {  

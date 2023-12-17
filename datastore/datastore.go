@@ -1,9 +1,10 @@
 package datastore
 
 import (
-	"GO-LANG/model"
 	"os"
 	"strconv"
+
+	"github.com/Prakhar-jain28/GO_CRUD_API/model"
 
 	"context"
 	"fmt"

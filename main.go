@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GO-LANG/datastore"
-	"GO-LANG/handler"
+	"github.com/Prakhar-jain28/GO_CRUD_API/datastore"
+	"github.com/Prakhar-jain28/GO_CRUD_API/handler"
 
 	"gofr.dev/pkg/gofr"
 ) 
