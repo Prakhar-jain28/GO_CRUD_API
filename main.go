@@ -15,8 +15,8 @@ func main() {
 
 	app.GET("/blog/{ID}", h.GetByID)   
 	app.POST("/blog", h.Create)
-	app.DELETE("/students/{ID}", h.Delete) 
-	app.PUT("/students/{ID}", h.Update)    
+	app.DELETE("/blog/{ID}", h.Delete) 
+	app.PUT("/blog/{ID}", h.Update)    
 
 	app.Server.HTTP.Port = 9092
 	app.Start()
