@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 
+	"gofr.dev/pkg/errors"
 	"gofr.dev/pkg/gofr"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -87,4 +88,41 @@ func (s *Blog) Delete(ctx *gofr.Context, id int) error {
 	}
 	fmt.Printf("Number of documents deleted: %d\n", result.DeletedCount)
 	return nil
+}
+
+func (s *Blog) Update(ctx *gofr.Context, blog *model.Blog) (*model.Blog, error) {
+	coll := s.connectMongoDB(ctx)
+
+	existingBlog, err := s.GetByID(ctx, strconv.Itoa(blog.ID))
+	if err != nil {
+		fmt.Println("Error fetching existing Blog data:", err)
+		return nil, err
+	}
+
+	updatedBlog := merge(existingBlog, blog)
+
+	filter := bson.M{"id": blog.ID}
+	update := bson.M{"$set": updatedBlog}
+
+	_, err = coll.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		fmt.Println("Failed to update student")
+		return nil, errors.DB{Err: err}
+	}
+
+	fmt.Println("Blog updated successfully", blog.ID)
+	return updatedBlog, nil
+}
+
+func merge(existing *model.Blog, update *model.Blog) *model.Blog {
+	if update.Name != "" {
+		existing.Name = update.Name
+	}
+	if update.Title != "" {
+		existing.Title = update.Title
+	}
+	if update.Content != "" {
+		existing.Content = update.Content
+	}
+	return existing
 }

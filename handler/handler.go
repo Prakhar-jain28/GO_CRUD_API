@@ -64,6 +64,33 @@ func (h handler) Create(ctx *gofr.Context) (interface{}, error) {
 	return resp, nil
 }
 
+func (h handler) Update(ctx *gofr.Context) (interface{}, error) {
+	i := ctx.PathParam("ID")
+	if i == "" {
+		return nil, errors.MissingParam{Param: []string{"id"}}
+	}
+
+	id, err := validateID(i)
+	if err != nil {
+		return nil, errors.InvalidParam{Param: []string{"id"}}
+	}
+
+	var blog model.Blog
+	if err = ctx.Bind(&blog); err != nil {
+		ctx.Logger.Errorf("error in binding: %v", err)
+		return nil, errors.InvalidParam{Param: []string{"body"}}
+	}
+
+	blog.ID = id
+
+	resp, err := h.store.Update(ctx, &blog)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
 
 func (h handler) Delete(ctx *gofr.Context) (interface{}, error) {
 	i := ctx.PathParam("ID")
